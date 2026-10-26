@@ -60,16 +60,7 @@ class OIDCController extends Controller
 
             $codeId = $authCode->id;
             $scopes = json_decode($authCode->scopes, true) ?? [];
-            
-            if ($user->isAuthOnly() && in_array(Scope::SERVER_JOIN, $scopes, true)) {
-                $authCode->revoked = true;
-                $authCode->save();
-            
-                throw new AccessDeniedException(
-                    'This account can not use for game authorization.'
-                );
-            }
-            
+
             if (in_array(Scope::PROFILE_SELECT, $scopes, true)) {
                 return view('LittleSkin\YggdrasilConnect::select-profile', [
                     'name' => $client->name,

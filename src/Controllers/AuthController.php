@@ -27,14 +27,6 @@ class AuthController extends Controller
         $user = auth()->user();
         $uid = $user->uid;
 
-        if ($user->isAuthOnly()) {
-            Log::channel('ygg')->warning("AUTH_ONLY user [$uid] tried to authenticate via Yggdrasil");
-
-            throw new ForbiddenOperationException(
-                '该账户仅用于 OAuth 认证，禁止登录游戏'
-            );
-        }
-
         // clientToken 原样返回，如果没提供就给客户端生成一个
         $clientToken = $request->input('clientToken', RamseyUuid::uuid4()->getHex()->toString());
 
